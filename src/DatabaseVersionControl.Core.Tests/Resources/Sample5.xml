@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseVersion
+ defaultProfile="Default"
+ xsi:noNamespaceSchemaLocation="..\..\DVCSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <profiles>
+      <profile id="Default">
+        <repositoryProfile
+            type="sqlServer"
+            connectionString="data source=Localhost;Integrated Security=True;"
+            
+            databaseName="DvcTest"
+            repositoryID="MainDatabase">
+          <trackingByTable tableName="DVC_Tracking" autoCreate="True" />
+        </repositoryProfile>
+    </profile>
+    <profile id="loader">
+      <repositoryProfile
+          type="sqlServer"
+          connectionString="data source=Localhost;Integrated Security=True;"
+          commandTimeout="300"
+          databaseName="DvcTest"
+          repositoryID="MainDatabase">
+        <trackingByTable tableName="DVC_Tracking" autoCreate="True" />
+        <properties>
+          <property name="defaultProp3" >
+            defaultProp1Value3OverRide
+          </property>
+          <property name="defaultProp4" value="defaultProp1Value4" />
+          <property name="defaultProp4" value="defaultProp1Value4Duplicate" />
+        </properties>
+      </repositoryProfile>
+    </profile>
+  </profiles>
+  <repositories>
+    <repository id="MainDatabase">
+		<properties>
+				<property name="defaultProp1" value="defaultProp1Value1" />
+				<property name="defaultProp2" value="defaultProp1Value2" />
+				<property name="defaultProp3" value="defaultProp1Value3" />
+        <property name="defaultProp3" value="defaultProp1Value3Duplicate" />
+	</properties>
+      <initialRunner>
+        <sqlRunner index="1" createDate="2010-04-16" description="Initialize script ${defaultProp3}" createBy="Rolf Wessels">
+          <command>
+            <sql>create database ${dp.DatabaseName}</sql>
+          </command>
+          <rollback>
+            <sql>drop database ${dp.DatabaseName}</sql>
+          </rollback>
+        </sqlRunner>
+      </initialRunner>
+      <updates>
+        <sqlRunner index="2"  description="Create Product table" createDate="2010-05-25" createBy="Rolf" unknownProperty="123">
+          <command>
+            <sql>
+              CREATE TABLE [Product]${defaultProp4} (
+              [SellableProductID] bigint NOT NULL,
+              [Title] varchar(200) NOT NULL,
+              [ArtistName] varchar(200) NOT NULL,
+              [ImageName] varchar(200) NOT NULL,
+              [Price] Decimal(8,2) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Product] PRIMARY KEY ([SellableProductID])
+              )
+              ON [PRIMARY]
+            </sql>
+          </command>
+          <rollback>
+            <sql>drop table Product</sql>
+          </rollback>
+          <testData>
+			  <sql>
+          insert into Product${defaultProp3}
+          (SellableProductID, Title, ArtistName, ImageName, Price, CreateDate, UpdateDate) VALUES
+          ('4', 'Alpha Beta Gaga - Mark Ronson Remix (Instrumental)', 'Air', '1-0724386120458_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+          ('14', 'Alpha Beta Gaga (Edit 91)', 'Air', '1-0724386120458_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+          ('30', 'Le Soleil Est Près De Moi', 'Air', '1-0724386188458_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+          ('38', 'Give My Love To Rose', 'Johnny Cash', '114-0829410977685_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+          ('62', 'You''re The Nearest Thing To Heaven', 'Johnny Cash', '114-0829410977685_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+          ('78', 'Raag Bageshree', 'Hari Prasad Chaurasia', '114-0803680556009_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+          ('123', 'Raga Hameer', 'Ravi Shankar', '114-0803680583807_L_F_W.jpg', '123.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+          ('142', 'Raga Hameer', 'Ravi Shankar', '114-0803680583807_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31')
+        </sql>
+          </testData>
+        </sqlRunner>
+        
+      </updates>
+    </repository>
+  </repositories>
+</databaseVersion>

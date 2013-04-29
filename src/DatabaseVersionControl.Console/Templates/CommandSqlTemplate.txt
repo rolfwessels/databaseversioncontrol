@@ -1,0 +1,3 @@
+﻿	<sqlRunner index="%Index%" description="%Description%" createDate="%DateTime%" createBy="DvcExporter">
+		<command><csv datafile="%Filename%" table="%TableName%" /></command>
+	</sqlRunner>

@@ -1,0 +1,50 @@
+2010-03-25 08:36:58,587 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 08:36:58,626 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 08:36:58,644 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 08:36:58,645 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 08:36:58,645 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 08:45:08,206 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 08:45:08,244 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 08:45:08,261 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 08:45:08,263 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 08:45:08,263 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 09:05:17,138 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 09:05:17,175 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 09:05:17,192 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 09:05:17,193 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 09:05:17,193 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 09:06:19,714 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 09:06:19,750 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 09:06:19,767 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 09:06:19,769 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 09:06:19,769 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 09:06:47,766 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 09:06:47,804 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 09:06:47,821 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 09:06:47,822 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 09:06:47,822 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 09:06:59,990 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 09:07:00,027 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 09:07:00,044 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 09:07:00,046 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 09:07:00,046 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 09:22:51,357 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 09:22:51,386 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 09:22:51,399 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 09:22:51,400 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 09:22:51,400 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 09:23:43,046 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 09:23:43,077 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 09:23:43,089 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 09:23:43,090 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 09:23:43,090 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-03-25 09:24:31,627 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-03-25 09:24:31,655 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-03-25 09:24:31,669 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-03-25 09:24:31,670 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-03-25 09:24:31,670 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService
+2010-07-21 15:09:49,875 [1] INFO  PartCover.Browser.MainEntry [(null)] - search for features
+2010-07-21 15:09:49,993 [1] INFO  PartCover.Browser.FeatureSeeker [(null)] - seek for features in PartCover.Browser, Version=2.3.0.35109, Culture=neutral, PublicKeyToken=null
+2010-07-21 15:09:50,075 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.BrowserFormFeature
+2010-07-21 15:09:50,078 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.FeatureViewCoverage
+2010-07-21 15:09:50,078 [1] INFO  PartCover.Browser.MainEntry [(null)] - register feature: PartCover.Browser.Features.CoverageReportService

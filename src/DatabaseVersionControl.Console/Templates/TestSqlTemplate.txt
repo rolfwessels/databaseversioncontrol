@@ -1,0 +1,4 @@
+﻿	<sqlRunner index="%Index%" description="%Description%" createDate="%DateTime%" createBy="DvcExporter">
+		<command><sql>select 'JustDummySql'</sql></command>
+		<testData><csv datafile="%Filename%" table="%TableName%" /></testData>
+	</sqlRunner>

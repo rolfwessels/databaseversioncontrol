@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseVersion
+ defaultProfile="Default"
+ xsi:noNamespaceSchemaLocation="DVCSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <profiles>
+    <profile id="Default">
+      <repositoryProfile
+          type="sqlServer"
+          connectionString="data source=Localhost;Integrated Security=True;"
+          commandTimeout="30"
+          databaseName="DvcTest"
+          repositoryID="MainDatabase">
+        <trackingByTable tableName="DVC_Tracking" autoCreate="True" />
+      </repositoryProfile>
+  </profile>
+  </profiles>
+  <repositories>
+    <repository id="MainDatabase">
+      <initialRunner>
+        <sqlRunner index="1" createDate="2010-04-16" description="Initialize script" createBy="Rolf Wessels">
+          <command>
+            <sql>create database ${dp.DatabaseName}</sql>
+          </command>
+          <rollback>
+            <sql>drop database ${dp.DatabaseName}</sql>
+          </rollback>
+        </sqlRunner>
+      </initialRunner>
+      <updates>
+        <sqlRunner index="2"  description="Create Product table" createDate="2010-05-25" createBy="Rolf">
+          <command>
+            <sql>
+              CREATE TABLE [Product] (
+              [SellableProductID] bigint NOT NULL,
+              [Title] varchar(200) NOT NULL,
+              [ArtistName] varchar(200) NOT NULL,
+              [ImageName] varchar(200) NOT NULL,
+              [Price] Decimal(8,2) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Product] PRIMARY KEY ([SellableProductID])
+              )
+              ON [PRIMARY]
+            </sql>
+          </command>
+          <rollback>
+            <sql>drop table Product</sql>
+          </rollback>
+          <testData>
+			  <sql>insert into Product
+					(SellableProductID, Title, ArtistName, ImageName, Price, CreateDate, UpdateDate) VALUES
+					('4', 'Alpha Beta Gaga - Mark Ronson Remix (Instrumental)', 'Air', '1-0724386120458_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+					('14', 'Alpha Beta Gaga (Edit 91)', 'Air', '1-0724386120458_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+					('30', 'Le Soleil Est Près De Moi', 'Air', '1-0724386188458_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+					('38', 'Give My Love To Rose', 'Johnny Cash', '114-0829410977685_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+					('62', 'You''re The Nearest Thing To Heaven', 'Johnny Cash', '114-0829410977685_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+					('78', 'Raag Bageshree', 'Hari Prasad Chaurasia', '114-0803680556009_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+					('123', 'Raga Hameer', 'Ravi Shankar', '114-0803680583807_L_F_W.jpg', '123.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31'),
+					('142', 'Raga Hameer', 'Ravi Shankar', '114-0803680583807_L_F_W.jpg', '1.00', '2010-05-01 14:04:24', '2010-05-01 16:38:31')
+				</sql>
+          </testData>
+        </sqlRunner>
+        <sqlRunner index="3"   description="Additional Customer table required" createDate="2010-05-27" createBy="Rolf">
+          <command>
+            <sql>
+              CREATE TABLE [Customer] (
+              [CustomerID] int IDENTITY(1,1),
+              [Email] varchar(200) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Customer] PRIMARY KEY ([CustomerID])
+              )
+              ON [PRIMARY]
+
+              CREATE  UNIQUE  INDEX Customer_Email
+              ON Customer ( Email )
+            </sql>
+          </command>
+          <rollback>
+            <sql>
+              drop table Customer
+            </sql>
+          </rollback>
+        </sqlRunner>
+        <sqlRunner index="4"   description="Additional Voucher table required" createDate="2010-05-27" createBy="Rolf">
+          <command>
+            <sql>
+              CREATE TABLE [Voucher] (
+              [VoucherCode] varchar(20) NOT NULL,
+              [TotalItemCount] int NOT NULL,
+              [ItemRemaining] int NOT NULL,
+              [StartDate] datetime NOT NULL,
+              [EndDate] datetime NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Voucher] PRIMARY KEY ([VoucherCode])
+              )
+              ON [PRIMARY]
+
+            </sql>
+          </command>
+          <rollback>
+            <sql>
+              drop table Voucher
+            </sql>
+          </rollback>
+        </sqlRunner>
+        <sqlRunner index="5"   description="Additional Order table required" createDate="2010-05-27" createBy="Rolf">
+          <command>
+            <sql>
+              CREATE TABLE [Order] (
+              [GMVTransactionID] int NOT NULL,
+              [CustomerID] int NOT NULL,
+              [Finalized] bit NOT NULL,
+              [TrackCount] int NOT NULL,
+              [TotalValue] Decimal(8,2) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Order] PRIMARY KEY ([GMVTransactionID])
+              )
+              ON [PRIMARY]
+            </sql>
+          </command>
+          <rollback>
+            <sql>
+               drop table [Order]
+            </sql>
+          </rollback>
+        </sqlRunner>
+        <sqlRunner index="6" description="Additional Order table required" createDate="2010-05-27" createBy="Rolf">
+          <command>
+            <sql>
+              CREATE  INDEX Order_CustomerID
+              ON Order ( CustomerID )
+            </sql>
+          </command>
+        </sqlRunner>
+        <sqlRunner index="7"   description="Additional OrderItem required" createDate="2010-05-27" createBy="Rolf">
+          <command>
+            <sql>
+               CREATE TABLE [OrderItem] (
+              [GmvTransactionID] int NOT NULL,
+              [SellableProductID] bigint NOT NULL,
+              [Title] varchar(100) NOT NULL,
+              [ArtistName] varchar(100) NOT NULL,
+              [Value] Decimal(8,2) NOT NULL,
+              [VoucherCode] varchar(20) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__OrderItem] PRIMARY KEY CLUSTERED ([GmvTransactionID],[SellableProductID])
+              )
+              ON [PRIMARY]
+            </sql>
+          </command>
+          <rollback>
+            <sql>
+              drop table OrderItem
+            </sql>
+          </rollback>
+        </sqlRunner>
+        <sqlRunner index="8"   description="Create index" createDate="2010-05-27" createBy="Rolf">
+          <command>
+            <sql>
+              CREATE  INDEX OrderItem_GmvTransactionID  ON OrderItem ( GmvTransactionID )
+            </sql>
+          </command>
+        </sqlRunner>
+      </updates>
+    </repository>
+  </repositories>
+</databaseVersion>

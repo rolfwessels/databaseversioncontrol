@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<databaseVersion
+ defaultProfile="Default"
+ xsi:noNamespaceSchemaLocation="DVCSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <profiles>
+    <profile id="Default">
+      <repositoryProfile
+          type="sqlServer"
+          connectionString="%ConnectionString%"
+          commandTimeout="30"
+          databaseName="%DatabaseName%"
+          repositoryID="%DatabaseName%Rep">
+        <trackingByTable tableName="DVCTracking" autoCreate="True" />
+      </repositoryProfile>
+  </profile>
+  </profiles>
+  <repositories>
+    <repository id="%DatabaseName%Rep">
+      <initialRunner>
+        <sqlRunner index="1" createDate="%DateTime%" description="Initialize script" createBy="DvcExporter">
+          <command>
+            <sql>create database ${dp.DatabaseName}</sql>
+          </command>
+          <rollback>
+            <sql>
+            EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = '${dp.DatabaseName}';
+            ALTER DATABASE [${dp.DatabaseName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+            drop database ${dp.DatabaseName}</sql>
+          </rollback>
+        </sqlRunner>
+      </initialRunner>
+      <updates>
+        <sqlRunner index="2"  description="Import Schema" createDate="%DateTime%" createBy="DvcExporter">
+          <command>
+            <sql file="%ExportFileName%" />
+          </command>
+        </sqlRunner>
+%AdditionalUpdates%
+      </updates>
+    </repository>
+  </repositories>
+</databaseVersion>

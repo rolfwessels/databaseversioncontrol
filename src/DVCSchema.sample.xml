@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by rolf_wessels (Private) -->
+<databaseVersion defaultProfile="Default" xsi:noNamespaceSchemaLocation="DVCSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<profiles>
+		<profile id="Default">
+			<repositoryProfile type="sqlServer" connectionString="data source=Localhost;Integrated Security=True;" databaseName="DvcTest" repositoryID="MainDatabase">
+				<trackingByTable tableName="DVC_Tracking" autoCreate="True"/>
+			</repositoryProfile>
+		</profile>
+		<profile id="ProfileDeveloper">
+			<repositoryProfile type="sqlServer" commandTimeout="30" connectionString="data source=Localhost;Integrated Security=True;" databaseName="DvcTest" repositoryID="MainDatabase">
+				<trackingByTable tableName="DVC_Tracking" autoCreate="True"/>
+				<properties>
+					<property name="Pre.InitialRunner.Rollback">
+                EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = '${dp.DatabaseName};'
+                ALTER DATABASE [${dp.DatabaseName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+              </property>
+				</properties>
+			</repositoryProfile>
+		</profile>
+	</profiles>
+	<repositories>
+		<repository id="MainDatabase">
+			<properties>
+				<property name="Pre.InitialRunner.Rollback" value=""/>
+			</properties>
+			<initialRunner>
+				<sqlRunner index="1" createDate="2010-04-16" description="Initialize script" createBy="Rolf Wessels">
+					<command>
+						<sql>
+						${Pre.InitialRunner.Rollback}
+						create database ${dp.DatabaseName}</sql>
+					</command>
+					<rollback>
+						<sql>
+            drop database ${dp.DatabaseName}</sql>
+					</rollback>
+				</sqlRunner>
+			</initialRunner>
+			<updates>
+				<sqlRunner index="2" description="Create Products" createDate="2010-05-25" createBy="Rolf">
+					<command>
+						<sql>
+              CREATE TABLE [Product] (
+              [SellableProductID] bigint NOT NULL,
+              [Title] varchar(200) NOT NULL,
+              [ArtistName] varchar(200) NOT NULL,
+              [ImageName] varchar(200) NOT NULL,
+              [Price] Decimal(8,2) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Product] PRIMARY KEY ([SellableProductID])
+              )
+              ON [PRIMARY]
+            </sql>
+					</command>
+					<rollback>
+						<sql>drop table Product</sql>
+					</rollback>
+				</sqlRunner>
+				<sqlRunner index="3" description="Additional tables required" createDate="2010-05-27" createBy="Rolf">
+					<command>
+						<sql>
+              CREATE TABLE [Customer] (
+              [CustomerID] int IDENTITY(1,1),
+              [Email] varchar(200) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Customer] PRIMARY KEY ([CustomerID])
+              )
+              ON [PRIMARY]
+
+              CREATE  UNIQUE  INDEX Customer_Email
+              ON Customer ( Email )
+            </sql>
+					</command>
+					<rollback>
+						<sql>
+              drop table Customer
+            </sql>
+					</rollback>
+				</sqlRunner>
+				<sqlRunner index="4" description="Additional tables required" createDate="2010-05-27" createBy="Rolf">
+					<command>
+						<sql>
+              CREATE TABLE [Voucher] (
+              [VoucherCode] varchar(20) NOT NULL,
+              [TotalItemCount] int NOT NULL,
+              [ItemRemaining] int NOT NULL,
+              [StartDate] datetime NOT NULL,
+              [EndDate] datetime NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Voucher] PRIMARY KEY ([VoucherCode])
+              )
+              ON [PRIMARY]
+
+            </sql>
+					</command>
+					<rollback>
+						<sql>
+              drop table Voucher
+            </sql>
+					</rollback>
+				</sqlRunner>
+				<sqlRunner index="5" description="Additional tables required" createDate="2010-05-27" createBy="Rolf">
+					<command>
+						<sql>
+              CREATE TABLE [Order] (
+              [GMVTransactionID] int NOT NULL,
+              [CustomerID] int NOT NULL,
+              [Finalized] bit NOT NULL,
+              [TrackCount] int NOT NULL,
+              [TotalValue] Decimal(8,2) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__Order] PRIMARY KEY ([GMVTransactionID])
+              )
+              ON [PRIMARY]
+
+              CREATE  INDEX Order_CustomerID ON [Order] ( CustomerID )
+            </sql>
+					</command>
+					<rollback>
+						<sql>
+              drop table [Order]
+            </sql>
+					</rollback>
+				</sqlRunner>
+				<sqlRunner index="6" description="Additional tables required" createDate="2010-05-27" createBy="Rolf">
+					<command>
+						<sql>
+              CREATE TABLE [OrderItem] (
+              [GmvTransactionID] int NOT NULL,
+              [SellableProductID] bigint NOT NULL,
+              [Title] varchar(100) NOT NULL,
+              [ArtistName] varchar(100) NOT NULL,
+              [Value] Decimal(8,2) NOT NULL,
+              [VoucherCode] varchar(20) NOT NULL,
+              [CreateDate] datetime NOT NULL,
+              [UpdateDate] datetime NOT NULL
+              CONSTRAINT [PK__OrderItem] PRIMARY KEY CLUSTERED ([GmvTransactionID],[SellableProductID])
+              )
+              ON [PRIMARY]
+
+              CREATE  INDEX OrderItem_GmvTransactionID
+              ON OrderItem ( GmvTransactionID )
+            </sql>
+					</command>
+					<rollback>
+						<sql>
+              drop table OrderItem
+            </sql>
+					</rollback>
+				</sqlRunner>
+				<sqlRunner index="7" description="Loading table information from csv file" createDate="2010-09-20" createBy="Rolf">
+					<command>
+						<csv datafile="dbupdate_Data_[Order].csv" table="[Order]"  />
+					</command>
+					<testData>
+						<csv datafile="dbupdate_TestData_[Order].csv" table="[Order]"  />
+					</testData>
+				</sqlRunner>
+			</updates>
+		</repository>
+	</repositories>
+</databaseVersion>

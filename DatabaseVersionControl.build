@@ -1,0 +1,153 @@
+<?xml version="1.0" ?>
+<project name="DatabaseVersionControl" default="test" xmlns="http://nant.sourceforge.net/nightly/latest/nant.xsd">
+	<property name="svn.executable" value="tools\SlikSvn\svn.exe"/>
+	<!--Properties-->
+  <property name="company.name" value="Rolf Wessels"/>
+  <property name="solution.dir" value="src/"/>
+  <property name="build.dir" value="build" />
+  <property name="build.debug.dir" value="${build.dir}/debug" />
+  <property name="build.Release.dir" value="${build.dir}/release" />
+  <property name="build.reports.dir" value="${build.dir}/reports" />
+  <property name="build.temp.dir" value="${build.dir}/temp" />
+  <property name="build.dist.dir" value="${build.dir}/dist" />
+	<property name="nant.settings.currentframework" value="net-3.5" />
+	<property name="run-unit-tests.dir" value="${build.debug.dir}\DatabaseVersionControl.UnitTests" />
+	<property name="run-unit-tests.dll" value="${run-unit-tests.dir}\DatabaseVersionControl.UnitTests.dll" />
+  <property name="run-unit-tests.config" value="${run-unit-tests.dll}.config" />
+  
+  <!-- Version -->
+  <property name="version.major" value="0"/>
+  <property name="version.minor" value="1"/>
+  <property name="version.build" value="6"/>
+  <property name="version.revision" value="${datetime::get-day-of-year(datetime::now())}" />
+  <property name="project.fullversion" value="${version.major}.${version.minor}.${version.build}" dynamic="true" />
+  <property name="version.build" value="${build.number}" if="${property::exists('build.number')}"/>
+  <property name="version.revision" value="${build.vcs.number.1}" if="${property::exists('build.vcs.number.1')}" />
+
+  <!-- User targets -->
+	<target name="clean" description="Delete Automated Build artifacts">
+		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
+	</target>
+
+	<target name="compile" depends="version"  description="Compiles using the AutomatedDebug Configuration">
+		<exec
+      program="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe"
+      commandline="src\DatabaseVersionControl.sln /t:clean /p:Configuration=AutomatedDebug /v:q"
+      workingdir="." />
+    <exec
+      program="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe"
+      commandline="src\DatabaseVersionControl.sln /t:rebuild /p:Configuration=AutomatedDebug /v:q"
+      workingdir="." />
+	</target>
+
+	<target name="test" depends="compile, run-unit-tests" description="Compile and Run Tests" />
+
+  <target name="cover" depends="compile, run-code-cover-tests" description="Compile and Run Tests" />
+  
+  <target name="full" depends="clean, test, dist , tagsvn"	description="Compiles, tests, produces distributions, tagsSvn " />
+
+	<!-- Internal targets -->
+	 <target name="run-code-cover-tests" description="Code coverage of unit tests">
+    <property name="NUnit.console" value="Tools\nunit\nunit-console.exe" />
+    <property name="NUnit.console.args" value="/exclude=Integration Vault.UnitTests.dll" />
+    <echo message="${NUnit.console} ${run-unit-tests.dir} Vault.UnitTests.dll " />
+    <exec program="regsvr32"  commandline="/s tools\PartCover\PartCover.CorDriver.dll" />
+    <exec program="Tools\PartCover\PartCover.exe" failonerror="false" >
+      <arg value="--target &quot;${NUnit.console}&quot;" />
+      <arg value="--target-work-dir &quot;${run-unit-tests.dir}&quot;"/>
+      <arg value="--target-args  &quot;${NUnit.console.args}&quot;" />
+      <arg value="--include &quot;[Vault*]*&quot;" />
+      <arg value="--exclude &quot;[nunit*]*&quot;" /> 
+      <arg value="--output &quot;${build.reports.dir}\partcover.xml&quot;" />
+    </exec>
+    <echo>tools\PartCover\PartCover.Browser.exe build\reports\partcover.xml</echo>
+  </target>
+
+  <target name="run-unit-tests">
+    <mkdir dir="${build.reports.dir}" />
+    <nunit2>
+      <formatter type="Xml" usefile="true" extension=".xml" outputdir="${build.reports.dir}" />
+      <test assemblyname="${run-unit-tests.dll}" appconfig="${run-unit-tests.config}" >
+        <categories>
+          <exclude name="Integration" />
+        </categories>
+      </test>
+    </nunit2>
+  </target>
+  
+  <target name="version" description="Generate AssemblyInfo">
+    <echo message="Marking build with version ${project.fullversion}" />
+    <delete file="${solution.dir}/CommonAssemblyInfo.cs" failonerror="false"/>
+    <asminfo output="${solution.dir}/CommonAssemblyInfo.cs" language="CSharp">
+      <imports>
+        <import namespace="System.Reflection" />
+        <import namespace="System.Runtime.InteropServices" />
+      </imports>
+      <attributes>
+        <attribute type="ComVisibleAttribute" value="false" />
+        <attribute type="AssemblyVersionAttribute" value="${project.fullversion}" />
+        <attribute type="AssemblyCopyrightAttribute" value="Copyright © ${company.name} ${datetime::get-year(datetime::now())}" />
+        <attribute type="AssemblyCompanyAttribute" value="${company.name}" />
+        <attribute type="AssemblyTrademarkAttribute" value="" />
+        <attribute type="AssemblyCultureAttribute" value="" />
+      </attributes>
+      <references>
+        <include name="System.dll" />
+      </references>
+    </asminfo>
+  </target>
+  
+  <target name="tagsvn">
+    <property name="svn.build.root.path" value="https://databaseversioncontrol.googlecode.com/svn/" />
+    <property name="tag.name" value ="Release/v.${project.fullversion}"/>
+    
+    <exec program="${svn.executable}" commandline='ls ${svn.build.root.path}/tags/${tag.name}/ --xml' output='svn_${project.fullversion}.xml' failonerror='false' resultproperty="nunit.exit.code" />
+    
+    <delete file='svn_${project.fullversion}.xml' />
+    <fail message='${svn.build.root.path}/tags/${tag.name}/ already exists.'  if="${nunit.exit.code != '1'}" />
+    <exec 
+      program="${svn.executable}"  
+      commandline='copy ${svn.build.root.path}/trunk ${svn.build.root.path}/tags/${tag.name}/ -m "Branched ${tag.name} by nant script."'
+      if="${nunit.exit.code == '1'}" />
+  </target>
+  
+	<target name="dist">
+    <property name="dist.name" value="dvc${project.fullversion}" />
+    <property name="dist.fromfolder" value="${build.debug.dir}\DatabaseVersionControl.Console" />
+    <mkdir dir="${build.temp.dir}" />
+    
+    <delete file="${dist.fromfolder}\Plossum CommandLine.pdb" />
+    <exec program="Tools\ilmerge\ilmerge.exe" failonerror="true" >
+      <arg value="/out:&quot;${build.temp.dir}\dvc.exe&quot;" />
+      <arg value="&quot;${dist.fromfolder}\dvc.exe&quot;"/>
+      <arg value="&quot;${dist.fromfolder}\C5.dll&quot;" />
+      <arg value="&quot;${dist.fromfolder}\StructureMap.dll&quot;" />
+      <arg value="&quot;${dist.fromfolder}\Plossum CommandLine.dll&quot;" />
+      <arg value="&quot;${dist.fromfolder}\log4net.dll&quot;" />
+      <arg value="&quot;${dist.fromfolder}\DatabaseVersionControl.Core.dll&quot;" />
+      <arg value="&quot;${dist.fromfolder}\mysql.data.dll&quot;" />
+      
+    </exec>
+    <copy todir="${build.temp.dir}">
+      <fileset basedir="${dist.fromfolder}">
+        <include name="loggingSettings.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${build.temp.dir}">
+      <fileset basedir="${solution.dir}">
+        <include name="DVCSchema.sample.xml" />
+      </fileset>
+    </copy>
+		
+		<mkdir dir="${build.dist.dir}" unless="${directory::exists(build.dist.dir)}"  />
+		<zip zipfile="${build.dist.dir}\${dist.name}.zip">
+			<fileset basedir="${build.temp.dir}">
+				<include name="**\*.*" />
+        <exclude name="**\*.pdb" />
+			</fileset>
+		</zip>
+    <delete dir="${build.temp.dir}" />
+	</target>
+	
+</project>
+
