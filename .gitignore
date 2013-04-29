@@ -1,0 +1,9 @@
+/build/
+*.user
+bin/
+obj/
+*.suo
+/src/_NCrunch_BuildIndicatron/*.cache
+
+/src/*.cache
+/src/DatabaseVersionControl.ncrunchsolution

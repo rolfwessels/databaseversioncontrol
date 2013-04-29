@@ -104,6 +104,7 @@ namespace DatabaseVersionControl.Cmd
                         }
                     }
                 }
+
                 OutputAndLog(string.Format("Load file data [{0}]", AppParam.ConnectionString ));
                 var sqlAdditions = new List<string>();
                 using (var sr = new StreamReader(File.OpenRead(exportSchemaFileName))){
