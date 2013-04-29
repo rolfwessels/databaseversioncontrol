@@ -76,9 +76,10 @@ namespace DatabaseVersionControl.Cmd
             if (AppParam.Verbose)
             {
                 var repository = (Hierarchy) LogManager.GetRepository();
-                var appender = new ConsoleAppender();
-                appender.Layout =
-                    new PatternLayout("%date %-5level  [%ndc] - %message%newline");
+                var appender = new ConsoleAppender
+                    {
+                        Layout = new PatternLayout("%date %-5level  [%ndc] - %message%newline")
+                    };
 
                 repository.Root.AddAppender(appender);
                 repository.Configured = true;
@@ -146,7 +147,6 @@ namespace DatabaseVersionControl.Cmd
                 Log.Info("Initialize rollback");
                 DvcController controller = GetController();
                 controller.InitializeRollBack();
-                
             }
 
             if (AppParam.Initialize){
@@ -161,14 +161,12 @@ namespace DatabaseVersionControl.Cmd
                 controller.InitializeTracker();
             }
             
-            
             if (AppParam.Rollback > 0)
             {
                 Log.Info("Bring database up to date");
                 DvcController controller = GetController();
                 controller.RollbackIndexToIndex(AppParam.Rollback);
             }
-
 
             if (AppParam.RollbackIndex > 0)
             {
@@ -205,10 +203,7 @@ namespace DatabaseVersionControl.Cmd
                 DvcController controller = GetController();
                 controller.PrintDatabaseVersion(Console.Out);
             }
-
-
             
-           
         }
 
         private string CalculateFileName(string filename)
