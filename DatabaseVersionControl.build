@@ -14,11 +14,13 @@
 	<property name="run-unit-tests.dir" value="${build.debug.dir}\DatabaseVersionControl.UnitTests" />
 	<property name="run-unit-tests.dll" value="${run-unit-tests.dir}\DatabaseVersionControl.UnitTests.dll" />
   <property name="run-unit-tests.config" value="${run-unit-tests.dll}.config" />
+  <property name="git.path" value="C:\Program Files (x86)\Git\cmd"/>
+  <property name="git.exe" value="git.exe"/>
   
   <!-- Version -->
   <property name="version.major" value="0"/>
   <property name="version.minor" value="1"/>
-  <property name="version.build" value="6"/>
+  <property name="version.build" value="7"/>
   <property name="version.revision" value="${datetime::get-day-of-year(datetime::now())}" />
   <property name="project.fullversion" value="${version.major}.${version.minor}.${version.build}" dynamic="true" />
   <property name="version.build" value="${build.number}" if="${property::exists('build.number')}"/>
@@ -44,7 +46,7 @@
 
   <target name="cover" depends="compile, run-code-cover-tests" description="Compile and Run Tests" />
   
-  <target name="full" depends="clean, test, dist , tagsvn"	description="Compiles, tests, produces distributions, tagsSvn " />
+  <target name="full" depends="clean, test, dist , git.tagandpush"	description="Compiles, tests, produces distributions, tagsSvn " />
 
 	<!-- Internal targets -->
 	 <target name="run-code-cover-tests" description="Code coverage of unit tests">
@@ -96,19 +98,10 @@
       </references>
     </asminfo>
   </target>
-  
-  <target name="tagsvn">
-    <property name="svn.build.root.path" value="https://databaseversioncontrol.googlecode.com/svn/" />
-    <property name="tag.name" value ="Release/v.${project.fullversion}"/>
-    
-    <exec program="${svn.executable}" commandline='ls ${svn.build.root.path}/tags/${tag.name}/ --xml' output='svn_${project.fullversion}.xml' failonerror='false' resultproperty="nunit.exit.code" />
-    
-    <delete file='svn_${project.fullversion}.xml' />
-    <fail message='${svn.build.root.path}/tags/${tag.name}/ already exists.'  if="${nunit.exit.code != '1'}" />
-    <exec 
-      program="${svn.executable}"  
-      commandline='copy ${svn.build.root.path}/trunk ${svn.build.root.path}/tags/${tag.name}/ -m "Branched ${tag.name} by nant script."'
-      if="${nunit.exit.code == '1'}" />
+
+  <target name="git.tagandpush">
+    <exec program="${git.exe}" commandline="tag &quot;${'Version' + project.fullversion}&quot;"  failonerror="true" basedir="${git.path}"  workingdir="./" />
+    <exec program="${git.exe}" commandline="push --tags origin master:master"  failonerror="true" basedir="${git.path}"  workingdir="./" />
   </target>
   
 	<target name="dist">
