@@ -37,7 +37,7 @@ namespace DatabaseVersionControl.Core.Database
             if (sql == null) throw new ArgumentNullException("sql");
 
             var sqlTransactionWrapper = transaction as SqlTransactionWrapper;
-            var cmd = new SqlCommand(sql,_sqlConnection,sqlTransactionWrapper != null ? sqlTransactionWrapper.Transaction : null);
+            var cmd = new SqlCommand(sql,Connection,sqlTransactionWrapper != null ? sqlTransactionWrapper.Transaction : null);
             paramaterLoader(new SqlParamAdder(cmd.Parameters));
             var sqlDataAdapter = new SqlDataAdapter(cmd);
             var dtResult = new DataTable();

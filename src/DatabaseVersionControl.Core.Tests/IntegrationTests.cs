@@ -81,7 +81,7 @@ namespace DatabaseVersionControl.Tests
             var versionSetup = new DatabaseVersionSetup();
             var profile = new DatabaseVersionSetup.Profile("Default",
                                                         new SqlServerDatabaseProfile(
-                                                            "Data Source=zino;User Id=rolf;Password=Password123;"
+                                                            @"Server=localhost\sqlexpress;Trusted_Connection=True;"                                                            
                                                             , "IntegrationTestForDvc"
                                                             ,"SqlServerTests"
                                                             ,60

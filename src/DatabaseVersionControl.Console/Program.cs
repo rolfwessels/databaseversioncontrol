@@ -105,7 +105,7 @@ namespace DatabaseVersionControl.Cmd
                         }
                     }
                 }
-
+                AppParam.ConnectionString = "Server=192.168.2.11;Database=ZoomMerchant;User Id=sa;Password=!@#$%A1;";
                 OutputAndLog(string.Format("Load file data [{0}]", AppParam.ConnectionString ));
                 var sqlAdditions = new List<string>();
                 using (var sr = new StreamReader(File.OpenRead(exportSchemaFileName))){
@@ -117,6 +117,7 @@ namespace DatabaseVersionControl.Cmd
                     Console.Out.WriteLine("i : Ignore table data");
                     string[] tables = sqlPubWizProxy.GetListOfTables(sr);
                     IConnection sqlServer = new SqlServer(AppParam.ConnectionString, 30);
+                    
                     int index = 3;
                     IOptionReader optionMemoryFile = new OptionMemoryFile(AppParam.ExportSettingsFile);
                     foreach (var table in tables){
@@ -214,7 +215,6 @@ namespace DatabaseVersionControl.Cmd
 
         private string ReadExportInput(IConnection sqlServer, string table, int index, IOptionReader optionMemoryFile)
         {
-           
             
             var key = "TableSelection"+table;
             if (!optionMemoryFile.ContainsOption(key)){
@@ -228,7 +228,6 @@ namespace DatabaseVersionControl.Cmd
                     Log.Error("Program:ReadExportInput Could not determine table size [" + e.Message + "]");
                     Console.Out.Write("Table {0} ", table);
                 }
-                
             }
             string readLine = optionMemoryFile.ReadLine(key); 
             if (readLine.ToUpper() == "M"){
